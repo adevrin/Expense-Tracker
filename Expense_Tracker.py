@@ -23,22 +23,23 @@ def add_expense():
         expense_catag["price"] = expense_price
         print(f"You have added {expense_nme} with the price of {expense_price} to your expenses")
 
-def remove_expense():
-    while True:
-        expense_rmv: str | int = input("What expense do you want to remove?")
-        try:
-            for exp in range(len(expenses)):
-                if expenses[exp][expense_rmv] in expenses:
-                    expenses[exp][expense_rmv].remove()
+
+def remove_expense(expense_rmv):
+# Asks user for the name of the expense to be removed
+        for index in range(len(expenses)): # Iterates through each category in expenses
+            for catag in expenses[index]: # Iterates through each key in the category
+                if expense_rmv in expenses[index][catag]:
+                    removed = expenses[index][catag].pop([expense_rmv])
+                    return removed
                 else:
                     return f"You do not have any expenses called {expense_rmv}"
 
-        except ValueError:
 
-
-
-            
-
-
-add_expense()
-test = 123123
+def veiw_expenses():
+    for catag in expenses:
+        mini_list = []
+        catag = expenses.keys()
+        print(f"CATERGORY ----> {catag.upper()}")
+        for value in catag.values():
+            mini_list.append(value)
+        print(f"{mini_list[0]} {mini_list[1]}")
