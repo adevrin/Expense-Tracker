@@ -13,7 +13,7 @@ def add_expense():
     # What category the expense fits into
     expense_catag = input("What is the category?\n").lower()
     # Checks if the category was already there
-    if expense_catag not in temp_dict:
+    if expense_catag not in expenses:
         temp_dict[expense_catag] = {"name": expense_nme,
                               "price": expense_price}
         expenses.append(temp_dict)
