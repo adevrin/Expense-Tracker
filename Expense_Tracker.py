@@ -24,7 +24,21 @@ def add_expense():
         print(f"You have added {expense_nme} with the price of {expense_price} to your expenses")
 
 def remove_expense():
-    expense_rmv = input("")
+    while True:
+        expense_rmv: str | int = input("What expense do you want to remove?")
+        try:
+            for exp in range(len(expenses)):
+                if expenses[exp][expense_rmv] in expenses:
+                    expenses[exp][expense_rmv].remove()
+                else:
+                    return f"You do not have any expenses called {expense_rmv}"
+
+        except ValueError:
+
+
+
+            
+
 
 add_expense()
 test = 123123
