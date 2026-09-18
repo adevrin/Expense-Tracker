@@ -1,6 +1,10 @@
+# expense_nme = str(input("What is your new expense?\n"))
+# expense_rmv = str(input("Which expense do you want to remove?\n"))
+
 expenses = []  # Initial empty list
 
-def add_expense():
+def add_expense(expense_nme, expense_price, expenses):
+    temp_list = []
     temp_dict = {}
     expense_nme = str(input("What is your new expense?\n"))  # Name of expense
     while True:
@@ -13,19 +17,20 @@ def add_expense():
     # What category the expense fits into
     expense_catag = input("What is the category?\n").lower()
     # Checks if the category was already there
-    if expense_catag not in expenses:
-        temp_dict[expense_catag] = {"name": expense_nme,
-                                    "price": expense_price}
-        expenses.append(temp_dict)
-        print(expenses)
-    else:
-        temp_dict = {"name": expense_nme,
-                     "price": expense_price}
-        expenses[expense_catag].append(temp_dict)
-        print(f"You have added {expense_nme} with the price of {expense_price} to your expenses")
+    for index in range(len(expenses)):
+        if expense_catag in expenses[index]:
+            temp_list.append({"name": expense_nme,
+                            "price": expense_price})
+            expenses[index][expense_catag] += temp_list
+            return f"Added {expense_nme}, price {expense_price} to category {expense_catag}"
+        elif index == len(expenses) - 1:
+            temp_list.append({"name": expense_nme,
+                            "price": expense_price})
+            temp_dict[expense_catag] = temp_list
+            expenses.append(temp_dict)
+            return f"Added {expense_nme}, price {expense_price} to NEW category {expense_catag}"
 
-
-def remove_expense(expense_rmv):
+def remove_expense(expense_rmv, expenses):
     # Asks user for the name of the expense to be removed
     for index in range(len(expenses)): # Iterates through each category in expenses
         for catag in expenses[index]: # Iterates through each key in the category
@@ -36,7 +41,10 @@ def remove_expense(expense_rmv):
                 return f"You do not have any expenses called {expense_rmv}"
 
 
-def view_expenses():
+def remove_category():
+
+
+def view_expenses(expenses):
     for catag in expenses:
         mini_list = []
         catag = expenses.keys()
