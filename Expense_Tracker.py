@@ -1,22 +1,20 @@
 import json
 
 filepath = "expenses_data.json"
-# expense_rmv = str(input("Which expense do you want to remove?\n")).lower()
-# expense_rmv_catag = str(input("Which category do you want to completely remove?\n")).lower()
-# budget = str(input("What do you want to set your monthly budget as?\n")).lower()
 
 expenses = []  # Initial empty list
-budget = 0 # Initial 0 budget
+budget = 0  # Initial 0 budget
 
-def add_expense(expense_nme, expense_price, expenses):
+
+def add_expense(expenses):
     temp_list = []
     temp_dict = {}
-
-    expense_nme = str(input("What is your new expense?\n")).lower()  # Name of expense
+    # Name of expense
+    expense_nme = str(input("What is your new expense?\n")).lower()
 
     while True:
         try:
-        # Price of expense
+            # Price of expense
             expense_price = float(input("How much does it cost\n"))
             break
         except ValueError:
@@ -36,21 +34,22 @@ def add_expense(expense_nme, expense_price, expenses):
     for index in range(len(expenses)):
         if expense_catag in expenses[index]:
             temp_list.append({"name": expense_nme,
-                            "price": expense_price})
+                              "price": expense_price})
             expenses[index][expense_catag] += temp_list
             return f"Added {expense_nme}, price {expense_price} to category {expense_catag}\n"
         elif index == len(expenses) - 1:
             temp_list.append({"name": expense_nme,
-                            "price": expense_price})
+                              "price": expense_price})
             temp_dict[expense_catag] = temp_list
             expenses.append(temp_dict)
             return f"Added {expense_nme}, price {expense_price} to NEW category {expense_catag}\n"
 
 
 def remove_expense(expense_rmv, expenses):
-    # Asks user for the name of the expense to be removed
-    for index in range(len(expenses)): # Iterates through each list in expenses
-        for catag in expenses[index]: # Iterates through each category in expenses
+    # Iterates through each list in expenses
+    for index in range(len(expenses)):
+        # Iterates through each category in expenses
+        for catag in expenses[index]:
             for dict in expenses[index][catag]:
                 if expense_rmv == dict["name"]:
                     expenses[index][catag].remove(dict)
@@ -70,32 +69,44 @@ def remove_category(expense_rmv_catag, expenses):
 
 
 def view_expenses(expenses):
-    if len(expenses) < 1:
-        return "You have no expenses\n"
-    for index in range(len(expenses)):
-        for catag in expenses[index]:
-            print(f"CATERGORY ----> {catag.upper()}\n")
-            for dict in expenses[index][catag]:
-                print(f"{dict['name']}, £{dict['price']}\n")
-
-
-def monthly_budget(budget, expenses):
-    choice = str(input("would you like to set a budget? yes or no\n")).lower().strip()
-    if choice == "yes":
-        budget = str(input("What do you want to set your monthly budget as?\n")).lower()
-    if budget <= 0:
-        return "Budget could not be registered"
-    total = 0
-    for index in range(len(expenses)):
-        for catag in expenses[index]:
-            for dict in expenses[index][catag]:
-                total += dict["price"]
-    difference = budget - total
-    if difference < 0:
-        print(f"Spent over the budget by £{abs(difference)}\n" )
+    if len(expenses) <= 0:
+        print("You have no expenses\n")
+        return
     else:
-        print(f"£{difference} budget remaining\n")
-    return f"Total price: £{total}, Budget: {budget}"
+        for index in range(len(expenses)):
+            for catag in expenses[index]:
+                print(f"CATERGORY ----> {catag.upper()}\n")
+                for dict in expenses[index][catag]:
+                    print(f"{dict['name']}, £{dict['price']}\n")
+        return
+
+
+def monthly_budget(expenses, budget):
+    while True:
+        try:
+            choice = str(
+                input("would you like to set a budget? yes or no\n")).lower().strip()
+            if choice == "yes":
+                budget_add = float(
+                    input("What do you want to set your monthly budget as?\n")
+                return budget_add
+        except ValueError:
+            print("Please enter a number")
+        if budget <= 0:
+            print(f"Budget could not be registered")
+        else:
+            total = 0
+            for index in range(len(expenses)):
+                for catag in expenses[index]:
+                    for dict in expenses[index][catag]:
+                        total += dict["price"]
+            difference = budget - total
+            if difference < 0:
+                print(f"Spent over the budget by £{abs(difference)}\n")
+            else:
+                print(f"£{difference} budget remaining\n")
+            return f"Total price: £{total}, Budget: {budget}"
+
 
 def save(expenses, budget, filepath):
     all_data = {
@@ -109,42 +120,53 @@ def save(expenses, budget, filepath):
     except FileNotFoundError:
         return []
 
+
 def load_expenses(expenses, budget, filepath):
     with open(filepath, "r") as file:
         data = json.load(file)
-        all_data += data
+        all_data = data
         expenses += all_data["expenses"]
         budget += all_data["budget"]
-        return "Data  has been loaded\n"
+        print("Data has been loaded\n")
+        return budget
+
 
 while True:
     option = str(input("""=== Expense Tracker ===
 
-1. Add expense
-2. Remove expense
-3. Remove category
-4. View expenses
-5. Monthly budget
-6. Save
-7. Exit
+    1. Add expense
+    2. Remove expense
+    3. Remove category
+    4. View expenses
+    5. Monthly budget
+    6. Save
+    7. Exit
+    Choose an option:\n""")).lower().strip(" ")
 
-Choose an option:\n""")).lower().strip(" ")
-    if option == ("1" or "addexpense"):
-        expense_nme = str(input("What is your new expense?\n")).lower()
-        add_expense
-    elif option == ("2" or "removeexpense"):
-        expense_rmv = str(input("Which expense do you want to remove?\n")).lower()
-        remove_expense
-    elif option == ("3" or "removecategory"):
-        expense_rmv_catag = str(input("Which category do you want to completely remove?\n")).lower()
-        remove_category
-    elif option == ("4" or "viewexpense"):
-        view_expenses
-    elif option == ("5" or "monthlybudget"):
-        monthly_budget
-    elif option == ("6" or "save"):
-        save
-    elif option == ("7" or "exit"):
+    if option == "1" or option == "addexpense":
+        add_expense(expenses)
+
+    elif option == "2" or option == "removeexpense":
+        expense_rmv = str(
+            input("Which expense do you want to remove?\n")).lower()
+        remove_expense(expense_rmv, expenses)
+
+    elif option == "3" or option == "removecategory":
+        expense_rmv_catag = str(
+            input("Which category do you want to completely remove?\n")).lower()
+        remove_category(expense_rmv_catag, expenses)
+
+    elif option == "4" or option == "viewexpense":
+        view_expenses(expenses)
+
+    elif option == "5" or option == "monthlybudget":
+        monthly_budget(expenses, budget)
+
+    elif option == "6" or option == "save":
+        save(expenses, budget, filepath)
+
+    elif option == "7" or option == "exit": 
         break
+
     else:
         print("Make sure your option is between 1 and 7 inclusive, or type the option")
