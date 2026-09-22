@@ -33,14 +33,15 @@ def add_expense(expenses):
             temp_list.append({"name": expense_nme,
                               "price": expense_price})
             expenses[index][expense_catag] += temp_list
-            return f"Added {expense_nme}, price {expense_price} to category {expense_catag}\n"
+            print(f"Added {expense_nme}, price {expense_price} to category {expense_catag}\n")
+            return
         elif index == len(expenses) - 1:
             temp_list.append({"name": expense_nme,
                               "price": expense_price})
             temp_dict[expense_catag] = temp_list
             expenses.append(temp_dict)
-            return f"Added {expense_nme}, price {expense_price} to NEW category {expense_catag}\n"
-
+            print(f"Added {expense_nme}, price {expense_price} to NEW category {expense_catag}\n")
+            return
 
 def remove_expense(expense_rmv, expenses):
     # Iterates through each list in expenses
@@ -82,21 +83,20 @@ def monthly_budget(expenses, budget):
     print(f"your budget is currently £{budget}")
     budget_add = 0
     while True:
-        try:
-            choice = str(
-                input("would you like to set a budget? yes or no\n")).lower().strip()
-            if choice == "yes":
+        choice = str(input("would you like to set a budget? yes or no\n")).lower().strip()
+        if choice == "yes":
+            try:
                 budget_add = float(
                     input("What do you want to set your monthly budget as?\n"))
+                budget = budget_add
                 if budget_add <= 0:
                     print(f"Budget could not be registered") 
-        except ValueError:
-            print("Please enter a number")
-        budget = budget_add
-        try:
-            choice = str(
-                input("would you like to see your budget? yes or no\n")).lower().strip()
-            if choice == "yes":
+            except ValueError:
+                print("Please enter a number")    
+        choice_2 = str(
+            input("would you like to see your budget? yes or no\n")).lower().strip()
+        if choice_2 == "yes":
+            try:
                 total = 0
                 for index in range(len(expenses)):
                     for catag in expenses[index]:
@@ -109,9 +109,10 @@ def monthly_budget(expenses, budget):
                     print(f"£{difference} budget remaining\n")
                     print(f"Total price: £{total}, Budget: {budget}")
                     break
-        except ValueError:
-            print("Please enter a number")
-    budget = budget_add
+            except ValueError:
+                print("Please enter a number")
+        elif choice_2 == "no":
+            break
     return budget
 
 def save(expenses, budget, filepath):

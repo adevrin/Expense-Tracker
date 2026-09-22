@@ -1,3 +1,6 @@
+import os
+import time
+
 from Expense_functions import add_expense # expenses
 from Expense_functions import remove_expense # expense_rmv, expenses
 from Expense_functions import remove_category # expense_rmv_catag, expenses 
@@ -5,6 +8,13 @@ from Expense_functions import view_expenses # expenses
 from Expense_functions import monthly_budget # expenses, budget
 from Expense_functions import save # expenses, budget, filepath
 from Expense_functions import load_expenses # expenses, budget, filepath
+
+def clear():
+    if os.name == "nt":
+        os.system("cls")
+    else:
+        os.system("clear")
+    
 
 filepath = "expenses_data.json"
 
@@ -27,26 +37,32 @@ while True:
 
     if option == "1" or option == "addexpense":
         add_expense(expenses)
-
+        time.sleep(2)
+        clear()
     elif option == "2" or option == "removeexpense":
         expense_rmv = str(
             input("Which expense do you want to remove?\n")).lower()
         remove_expense(expense_rmv, expenses)
-
+        time.sleep(2)
+        clear()
     elif option == "3" or option == "removecategory":
         expense_rmv_catag = str(
             input("Which category do you want to completely remove?\n")).lower()
         remove_category(expense_rmv_catag, expenses)
-
+        time.sleep(2)
+        clear()
     elif option == "4" or option == "viewexpense":
         view_expenses(expenses)
-
+        time.sleep(2)
+        clear()
     elif option == "5" or option == "monthlybudget":
         budget = monthly_budget(expenses, budget)
-    
+        time.sleep(2)
+        clear()
     elif option == "6" or option == "save":
         save(expenses, budget, filepath)
-
+        time.sleep(2)
+        clear()
     elif option == "7" or option == "exit": 
         break
 
